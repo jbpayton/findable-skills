@@ -1,0 +1,10 @@
+{
+  "local_paths": [
+    "~/skills/",
+    "./skills/"
+  ],
+  "github": {
+    "enabled": true,
+    "topic": "agentskills"
+  }
+}
