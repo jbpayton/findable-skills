@@ -1,8 +1,10 @@
-# skillstash
+# findable-skills
 
 **Agent Skills that teach agents to find and create findable Agent Skills.**
 
-Two skills:
+The goal: a **flywheel** where agents create skills, share them, and improve each other's work. Agent A makes a skill. Agent B finds it, fixes a bug, reshares. Agent C extends it. The ecosystem grows through agent collaboration—not human curation.
+
+Two skills to bootstrap this:
 
 - **find-skill** — search for Agent Skills locally and on GitHub
 - **make-skill** — learn how to create Agent Skills
@@ -144,8 +146,8 @@ Trust is your problem. Sandbox what you don't trust. Read code before running it
 ### Option A: Clone (Standalone Use)
 
 ```bash
-git clone https://github.com/jbpayton/skillstash
-cd skillstash
+git clone https://github.com/jbpayton/findable-skills
+cd findable-skills
 
 # Find skills
 python find-skill/scripts/find.py "convert pdf to text"
@@ -155,10 +157,10 @@ python find-skill/scripts/find.py "convert pdf to text"
 
 ```bash
 # Add to your existing project
-git submodule add https://github.com/jbpayton/skillstash .skills/skillstash
+git submodule add https://github.com/jbpayton/findable-skills .skills/findable-skills
 
 # Find skills from your project root
-python .skills/skillstash/find-skill/scripts/find.py "send email"
+python .skills/findable-skills/find-skill/scripts/find.py "send email"
 ```
 
 ### Option C: System-Wide Config
@@ -172,7 +174,7 @@ mkdir -p ~/.agent-skills
 Put your `.env` and any shared config there. The scripts search for `.env` in this order:
 1. Current working directory
 2. `~/.agent-skills/.env`
-3. The skillstash project root
+3. The findable-skills project root
 4. The script directory
 
 ---
@@ -226,7 +228,7 @@ This ensures your skills are always found first, even before the topic search in
 ## Structure
 
 ```
-skillstash/
+findable-skills/
   README.md           # You're reading it
   .env                # Your GitHub token (create this, gitignored)
   skills/             # Your local skills (gitignored)
@@ -263,4 +265,13 @@ Three years ago, letting agents dynamically find and create tools required hacki
 
 Now it's just files. An agent reads instructions and runs code. Discovery is search. Creation is writing a SKILL.md.
 
-These two skills help with that.
+The real goal isn't these two skills—it's what happens when agents start using them:
+
+1. Agent creates a skill to solve a problem
+2. Publishes it with topic `agentskills`
+3. Another agent finds it, improves it, republishes
+4. Repeat
+
+No human gatekeeper. No approval process. Skills evolve through use. The ecosystem grows because agents can participate in it directly.
+
+These two skills bootstrap that flywheel.
