@@ -139,18 +139,87 @@ Trust is your problem. Sandbox what you don't trust. Read code before running it
 
 ---
 
+## Installation
+
+### Option A: Clone (Standalone Use)
+
+```bash
+git clone https://github.com/jbpayton/skillstash
+cd skillstash
+
+# Find skills
+python find-skill/scripts/find.py "convert pdf to text"
+```
+
+### Option B: Submodule (Add to Your Project)
+
+```bash
+# Add to your existing project
+git submodule add https://github.com/jbpayton/skillstash .skills/skillstash
+
+# Find skills from your project root
+python .skills/skillstash/find-skill/scripts/find.py "send email"
+```
+
+### Option C: System-Wide Config
+
+For use across multiple projects, create a global config directory:
+
+```bash
+mkdir -p ~/.agent-skills
+```
+
+Put your `.env` and any shared config there. The scripts search for `.env` in this order:
+1. Current working directory
+2. `~/.agent-skills/.env`
+3. The skillstash project root
+4. The script directory
+
+---
+
 ## Getting Started
 
 ```bash
-# Clone this
-git clone https://github.com/jbpayton/skillstash
-
 # Find skills
 python find-skill/scripts/find.py "convert pdf to text"
 
 # Make a skill
 # Read make-skill/SKILL.md, then copy the template
 ```
+
+### GitHub Token Setup (Required for Publishing)
+
+To publish skills and make them discoverable, you need a GitHub Personal Access Token:
+
+1. Go to GitHub → Settings → Developer settings → Personal access tokens → **Tokens (classic)**
+2. Generate new token with the **`repo`** scope
+3. Create a `.env` file in the project root:
+
+```
+GITHUB_TOKEN=ghp_xxxxxxxxxxxx
+```
+
+The `repo` scope allows the scripts to:
+- Create your skills monorepo
+- Push skill code
+- Add the `agentskills` topic (required for discoverability)
+
+### Configure Your Skills Repo
+
+Edit `find-skill/scripts/config.json` to add your personal skills repo:
+
+```json
+{
+  "local_paths": ["~/skills/"],
+  "github": {
+    "enabled": true,
+    "topic": "agentskills",
+    "repos": ["your-username/your-skills-monorepo"]
+  }
+}
+```
+
+This ensures your skills are always found first, even before the topic search indexes them.
 
 ---
 
@@ -159,15 +228,21 @@ python find-skill/scripts/find.py "convert pdf to text"
 ```
 skillstash/
   README.md           # You're reading it
-  
+  .env                # Your GitHub token (create this, gitignored)
+  skills/             # Your local skills (gitignored)
+
   find-skill/         # Search for skills
     SKILL.md
     scripts/
       find.py
-      config.json
-      
+      config.json     # Configure your repos here
+
   make-skill/         # Create skills
     SKILL.md
+    scripts/
+      init.py         # Create a skills monorepo
+      create.py       # Create a skill from template
+      publish.py      # Publish a skill to GitHub
     references/
       format.md       # The agentskills.io format explained
       discovery.md    # How to make skills findable

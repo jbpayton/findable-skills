@@ -26,6 +26,9 @@ python scripts/find.py "resize images" --local-only
 
 # JSON output for programmatic use
 python scripts/find.py "send email" --json
+
+# Fetch and display full SKILL.md content
+python scripts/find.py "python" --fetch --limit 2
 ```
 
 ## Output
@@ -51,16 +54,45 @@ Edit `scripts/config.json`:
   "local_paths": ["~/skills/", "./skills/"],
   "github": {
     "enabled": true,
-    "topic": "agentskills"
+    "topic": "agentskills",
+    "repos": [
+      "your-username/your-skills-monorepo"
+    ]
   }
 }
 ```
 
+### Config Options
+
+| Field | Description |
+|-------|-------------|
+| `local_paths` | Local folders to search for skills |
+| `github.enabled` | Enable/disable GitHub search |
+| `github.topic` | Topic to search for (default: `agentskills`) |
+| `github.repos` | Your personal skill repos (always searched first) |
+
+### GitHub Token (Recommended)
+
+A GitHub token provides higher rate limits (5000/hour vs 60/hour) and is required for searching private repos.
+
+Create a `.env` file in the project root:
+
+```
+GITHUB_TOKEN=ghp_xxxxxxxxxxxx
+```
+
+Or set environment variables: `GITHUB_TOKEN` or `GH_TOKEN`
+
+To create a token:
+1. Go to GitHub → Settings → Developer settings → Personal access tokens
+2. Generate new token with `repo` scope (for private repos) or `public_repo` (for public only)
+
 ## What It Searches
 
 1. **Local folders** — Scans configured paths for directories containing SKILL.md
-2. **GitHub repos** — Searches repos with topic `agentskills` matching your query
-3. **GitHub code** — Finds SKILL.md files containing your search terms
+2. **Your repos** — Searches repos listed in `github.repos` config (fast, reliable)
+3. **Topic search** — Searches public repos with topic `agentskills`
+4. **Code search** — Finds SKILL.md files containing your search terms
 
 ## After Finding
 
@@ -75,11 +107,12 @@ Edit `scripts/config.json`:
 |------|--------|
 | `--local-only` | Skip GitHub, search only local folders |
 | `--json` | Output as JSON for parsing |
+| `--fetch` | Fetch and display full SKILL.md content |
 | `--limit N` | Maximum results (default: 10) |
 
 ## Notes
 
 - This skill searches only; it does not execute found skills
 - GitHub search requires network access
-- Unauthenticated GitHub API: ~10 requests/minute
+- With token: 5000 requests/hour. Without: 60 requests/hour
 - Local search works offline

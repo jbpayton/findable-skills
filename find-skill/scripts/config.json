@@ -5,6 +5,7 @@
   ],
   "github": {
     "enabled": true,
-    "topic": "agentskills"
+    "topic": "agentskills",
+    "repos": []
   }
 }

@@ -19,6 +19,23 @@ How to create an Agent Skill that other agents (and humans) can discover and use
 
 ## Quick Start
 
+### Using Scripts (Recommended)
+
+```bash
+# 1. First time only: create your skills repo
+python scripts/init.py my-skills --public
+
+# 2. Create a new skill inside your repo
+python scripts/create.py my-skill-name --output ./my-skills/ --author "You"
+
+# 3. Edit SKILL.md and add your code to scripts/
+
+# 4. Publish (commits and pushes to your repo)
+python scripts/publish.py ./my-skills/my-skill-name
+```
+
+### Manual Setup
+
 1. Copy `references/template/` to your new skill folder
 2. Edit the SKILL.md frontmatter (name, description)
 3. Replace the example script with your code
@@ -134,6 +151,66 @@ metadata:
 ```
 
 Optional. Honor system. Helps the ecosystem.
+
+## GitHub Token Setup
+
+The scripts require a GitHub Personal Access Token to create repos, push code, and add topics.
+
+### Creating Your Token
+
+1. Go to GitHub → Settings → Developer settings → Personal access tokens → **Tokens (classic)**
+2. Click "Generate new token (classic)"
+3. Give it a name (e.g., "agent-skills")
+4. Select the **`repo`** scope (full control of private repositories)
+5. Generate and copy the token
+
+### Storing Your Token
+
+Create a `.env` file in the project root:
+
+```
+GITHUB_TOKEN=ghp_xxxxxxxxxxxx
+```
+
+Or set it as an environment variable: `GITHUB_TOKEN` or `GH_TOKEN`
+
+**Important:** The `repo` scope is required to:
+- Create repositories (init.py)
+- Push code (publish.py)
+- Add the `agentskills` topic (makes your skills discoverable)
+
+## Scripts
+
+### init.py
+
+Initialize a skills monorepo (first time only):
+
+```bash
+python scripts/init.py my-skills              # Private repo
+python scripts/init.py my-skills --public     # Public repo
+```
+
+Creates a GitHub repo with `agentskills` topic. All your skills go here.
+
+### create.py
+
+Create a skill from the template:
+
+```bash
+python scripts/create.py my-skill --output ./my-skills/
+python scripts/create.py my-skill --author "You" --description "Does X" -o ./my-skills/
+```
+
+### publish.py
+
+Commit and push a skill to your repo:
+
+```bash
+python scripts/publish.py ./my-skills/my-skill
+python scripts/publish.py ./my-skills/my-skill --message "Update skill"
+```
+
+Commits the skill folder, adds the `agentskills` topic (if missing), and pushes to GitHub.
 
 ## Reference
 
